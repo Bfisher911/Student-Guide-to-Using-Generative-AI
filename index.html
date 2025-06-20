@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart, Safe & Honest — A Student’s Guide to Using Generative AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Base Styles & New Color Palette */
+        :root {
+            --primary-accent: #886AA6; /* Medium Purple */
+            --secondary-accent: #E4AEF2; /* Light Purple */
+            --dark-bg: #0A1240; /* Dark Navy Blue */
+            --card-bg: #10194B; /* Lighter Navy */
+            --border-color: #6D6F8C; /* Muted Blue/Purple */
+            --text-light: #D8D2D9; /* Light Gray */
+            --text-muted: #9a9eb3; /* Muted Gray/Blue */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+        }
+        .section-card {
+            background-color: var(--card-bg);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Modal Styles */
+        .modal-backdrop {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 40; opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-backdrop.active { opacity: 1; pointer-events: auto; }
+        .modal-content {
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            z-index: 50; opacity: 0; pointer-events: none;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .modal-content.active { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: auto; }
+
+        /* Accordion Animation */
+        .faq-answer, .rule-detail {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.4s ease-in-out;
+        }
+        .faq-answer.open, .rule-detail.open {
+            grid-template-rows: 1fr;
+        }
+        .faq-answer > div, .rule-detail > div {
+            overflow: hidden;
+        }
+
+        /* Scroll Animation */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .animate-on-scroll.visible { opacity: 1; transform: translateY(0); }
+        
+        /* Tab & Checklist Styles */
+        .tab.active { background-color: var(--primary-accent); color: white; }
+        .checkbox-label input:checked ~ .checkbox-icon { background-color: var(--secondary-accent); border-color: var(--secondary-accent); }
+        .checkbox-label input:checked ~ .checkbox-icon svg { display: block; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="py-12 px-4 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-6xl font-black text-white tracking-tight leading-tight">Smart, Safe & Honest</h1>
+            <p class="mt-4 text-xl md:text-2xl font-light" style="color: var(--secondary-accent);">A Student’s Guide to Using Generative AI</p>
+            <p class="mt-2 text-sm text-gray-400">(Version 2.0 – June 19, 2025)</p>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 pb-16">
+
+        <!-- 0. Quick-Start Card -->
+        <section class="section-card animate-on-scroll" id="quick-start">
+            <h2 class="text-2xl font-bold mb-6 text-white flex items-center">
+                <span class="bg-[var(--primary-accent)] text-white rounded-full h-8 w-8 flex items-center justify-center mr-3 font-black text-lg">0</span>
+                Quick-Start Card
+            </h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- DOs -->
+                <div class="bg-[#0f1742] p-6 rounded-lg border border-green-500/50">
+                    <h3 class="text-2xl font-bold text-green-400 mb-4 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        Do
+                    </h3>
+                    <ul class="space-y-3 text-[var(--text-muted)]">
+                        <li class="flex items-start"><span class="text-green-400 mr-2 mt-1">✓</span> Use AI for brainstorming, explaining tough ideas, or polishing draft wording.</li>
+                        <li class="flex items-start"><span class="text-green-400 mr-2 mt-1">✓</span> Check every fact, citation, code snippet, or translation an AI gives you.</li>
+                        <li class="flex items-start"><span class="text-green-400 mr-2 mt-1">✓</span> Add a short disclosure + citation whenever AI meaningfully shapes your submission.</li>
+                        <li class="flex items-start"><span class="text-green-400 mr-2 mt-1">✓</span> Use institution-approved tools or turn off “chat-history & training” in public models.</li>
+                    </ul>
+                </div>
+                <!-- DON'Ts -->
+                <div class="bg-[#0f1742] p-6 rounded-lg border border-red-500/50">
+                    <h3 class="text-2xl font-bold text-red-400 mb-4 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        Don’t
+                    </h3>
+                    <ul class="space-y-3 text-[var(--text-muted)]">
+                        <li class="flex items-start"><span class="text-red-400 mr-2 mt-1">✗</span> Paste exam questions or entire assignments into AI during closed-book tests.</li>
+                        <li class="flex items-start"><span class="text-red-400 mr-2 mt-1">✗</span> Submit raw AI output as “your” work.</li>
+                        <li class="flex items-start"><span class="text-red-400 mr-2 mt-1">✗</span> Hide your AI use or claim it as wholly original.</li>
+                        <li class="flex items-start"><span class="text-red-400 mr-2 mt-1">✗</span> Upload confidential, personal (PII), or unpublished research data.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 1. Guiding Principles -->
+        <section class="section-card animate-on-scroll" id="why-use-ai">
+             <h2 class="text-2xl font-bold mb-4 text-white flex items-center">
+                <span class="bg-[var(--primary-accent)] text-white rounded-full h-8 w-8 flex items-center justify-center mr-3 font-black text-lg">1</span>
+                Guiding Principles for AI Use
+            </h2>
+            <p class="mb-4 text-[var(--text-muted)]">Many academic institutions now let students use AI to augment learning, but insist on integrity, transparency, and privacy. The policies here reflect common guard-rails adopted at major universities.</p>
+            <div class="flex flex-wrap gap-4 justify-center pt-4 opacity-70">
+                <span class="text-gray-400">Stanford</span>
+                <span class="text-gray-600">&bull;</span>
+                <span class="text-gray-400">Oxford</span>
+                <span class="text-gray-600">&bull;</span>
+                <span class="text-gray-400">Cornell</span>
+                 <span class="text-gray-600">&bull;</span>
+                <span class="text-gray-400">Harvard</span>
+                 <span class="text-gray-600">&bull;</span>
+                <span class="text-gray-400">U. Michigan</span>
+            </div>
+        </section>
+
+        <!-- 2. The Four Golden Rules -->
+        <section class="section-card animate-on-scroll" id="golden-rules">
+            <h2 class="text-2xl font-bold mb-6 text-white flex items-center">
+                <span class="bg-[var(--primary-accent)] text-white rounded-full h-8 w-8 flex items-center justify-center mr-3 font-black text-lg">2</span>
+                The Four Golden Rules
+            </h2>
+            <div class="space-y-4" id="rules-container">
+                <!-- Rules will be dynamically inserted here -->
+            </div>
+        </section>
+        
+        <!-- 3. Allowed vs. Prohibited -->
+        <section class="section-card animate-on-scroll" id="allowed-prohibited">
+            <h2 class="text-2xl font-bold mb-6 text-white flex items-center">
+                 <span class="bg-[var(--primary-accent)] text-white rounded-full h-8 w-8 flex items-center justify-center mr-3 font-black text-lg">3</span>
+                Allowed vs. Prohibited Uses
+            </h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-semibold text-lg text-green-400 mb-3">Allowed (with disclosure)</h3>
+                    <ul class="space-y-2 text-[var(--text-muted)] list-disc list-inside">
+                        <li>Brainstorming ideas, outlines, or research questions.</li>
+                        <li>Getting plain-language explanations of complex concepts.</li>
+                        <li>Generating study flashcards or self-quizzes.</li>
+                        <li>Grammar and style improvements (similar to Grammarly).</li>
+                        <li>Debugging code when the instructor explicitly permits.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-lg text-red-400 mb-3">Prohibited</h3>
+                    <ul class="space-y-2 text-[var(--text-muted)] list-disc list-inside">
+                        <li>Using AI during closed-book quizzes/exams.</li>
+                        <li>Paraphrasing to dodge plagiarism checkers.</li>
+                        <li>Uploading sensitive or confidential institutional data.</li>
+                        <li>Submitting AI-invented references or unverified data.</li>
+                        <li>Delegating all parts of a graded task to AI.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-6 p-4 bg-[var(--secondary-accent)]/10 border border-[var(--secondary-accent)]/30 rounded-lg text-[var(--secondary-accent)]">
+                <strong>Heads Up!</strong> Your course syllabus may narrow or expand what counts as "Allowed." Always check first.
+            </div>
+        </section>
+
+        <!-- 4. Incidental vs. Substantive -->
+        <section class="section-card animate-on-scroll" id="incidental-substantive">
+            <h2 class="text-2xl font-bold mb-6 text-white flex items-center">
+                <span class="bg-[var(--primary-accent)] text-white rounded-full h-8 w-8 flex items-center justify-center mr-3 font-black text-lg">4</span>
+                Incidental vs. Substantive Use
+            </h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                 <div class="p-4 bg-[#0f1742] rounded-lg">
+                    <h3 class="font-bold text-white">Incidental Use</h3>
+                    <p class="text-[var(--text-muted)]">Zero content from the model ends up in the final work (e.g., “explain quantum tunnelling so I can understand the reading”). <span class="font-semibold text-green-400">No disclosure needed.</span></p>
+                </div>
+                <div class="p-4 bg-[#0f1742] rounded-lg border-2 border-[var(--secondary-accent)]">
+                    <h3 class="font-bold text-white">Substantive Use</h3>
+                    <p class="text-[var(--text-muted)]">Any AI text, ideas, code, images, or structure appear in the submission. <span class="font-semibold text-yellow-400">Must be disclosed & cited.</span></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Step-by-Step -->
+        <section class="section-card animate-on-scroll" id="step-by-step">
+            <h2 class="text-2xl font-bold mb-6 text-white flex items-center">
+                <span class="bg-[var(--primary-accent)] text-white rounded-full h-8 w-8 flex items-center justify-center mr-3 font-black text-lg">5</span>
+                Using AI the Right Way
+            </h2>
+            <div class="relative border-l-2 border-gray-600 pl-8 space-y-8">
+                <div class="absolute w-3 h-3 bg-[var(--secondary-accent)] rounded-full -left-1.5 mt-1.5 ring-4 ring-offset-4 ring-offset-[var(--card-bg)] ring-[var(--secondary-accent)]"></div>
+                <div class="animate-on-scroll"> <h3 class="font-bold text-lg text-white">1. Plan</h3> <p class="text-[var(--text-muted)]">Decide which part of the task AI will assist (outline? example code?).</p> </div>
+                <div class="animate-on-scroll"> <h3 class="font-bold text-lg text-white">2. Prompt</h3> <p class="text-[var(--text-muted)]">Ask clear, specific questions; avoid sensitive data.</p> </div>
+                <div class="animate-on-scroll"> <h3 class="font-bold text-lg text-white">3. Verify</h3> <p class="text-[var(--text-muted)]">Fact-check; run plagiarism or code linters; replace hallucinated references.</p> </div>
+                <div class="animate-on-scroll"> <h3 class="font-bold text-lg text-white">4. Transform</h3> <p class="text-[var(--text-muted)]">Rewrite in your own voice; add analysis, citations, and course concepts.</p> </div>
+                <div class="animate-on-scroll"> <h3 class="font-bold text-lg text-white">5. Disclose & Cite</h3> <p class="text-[var(--text-muted)]">See templates below. This is a critical step for academic integrity.</p> </div>
+                <div class="animate-on-scroll"> <h3 class="font-bold text-lg text-white">6. Reflect</h3> <p class="text-[var(--text-muted)]">Did AI actually help you learn? If not, adjust your approach next time.</p> </div>
+            </div>
+        </section>
+
+        <!-- 6 & 7. Disclosure & Citation -->
+        <section class="section-card animate-on-scroll" id="disclosure-citation">
+             <h2 class="text-2xl font-bold mb-6 text-white flex items-center">
+                <span class="bg-[var(--primary-accent)] text-white rounded-full h-8 w-8 flex items-center justify-center mr-3 font-black text-lg">6/7</span>
+                Disclosure & Citation
+            </h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Disclosure -->
+                <div class="bg-[#0f1742] p-6 rounded-lg">
+                    <h3 class="text-lg font-bold text-white mb-2">Disclosure Template</h3>
+                    <p class="text-[var(--text-muted)] mb-4">Place this statement in a footnote or endnote for any substantive AI use.</p>
+                    <button id="disclosure-button" class="w-full bg-[var(--primary-accent)] hover:opacity-90 text-white font-bold py-2 px-4 rounded-lg transition-opacity">
+                        View Disclosure Template
+                    </button>
+                </div>
+                <!-- Citation -->
+                <div class="bg-[#0f1742] p-6 rounded-lg">
+                     <h3 class="text-lg font-bold text-white mb-4">How to Cite AI</h3>
+                     <div id="citation-tabs" class="mb-4 flex space-x-1 rounded-lg bg-[var(--border-color)]/50 p-1">
+                        <button data-target="mla" class="tab w-full rounded-md py-1.5 text-sm font-medium leading-5 text-[var(--text-muted)] transition hover:bg-[var(--primary-accent)]/50 focus:outline-none active">MLA 9</button>
+                        <button data-target="apa" class="tab w-full rounded-md py-1.5 text-sm font-medium leading-5 text-[var(--text-muted)] transition hover:bg-[var(--primary-accent)]/50 focus:outline-none">APA 7</button>
+                        <button data-target="chicago" class="tab w-full rounded-md py-1.5 text-sm font-medium leading-5 text-[var(--text-muted)] transition hover:bg-[var(--primary-accent)]/50 focus:outline-none">Chicago</button>
+                     </div>
+                     <div id="citation-content" class="text-[var(--text-muted)] p-2 min-h-[100px]">
+                        <div id="mla" class="citation-panel">OpenAI. ChatGPT response to the author’s prompt, 10 May 2025.</div>
+                        <div id="apa" class="citation-panel hidden">OpenAI. (2025, May 10). ChatGPT response to prompt about quantum tunnelling [Large language model]. <a href="https://chat.openai.com/" class="text-[var(--secondary-accent)] hover:underline">https://chat.openai.com/</a></div>
+                        <div id="chicago" class="citation-panel hidden">OpenAI. “ChatGPT Response to Author,” May 10, 2025.</div>
+                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. Pre-Submission Checklist -->
+        <section class="section-card animate-on-scroll" id="checklist">
+             <h2 class="text-2xl font-bold mb-6 text-white flex items-center">
+                <span class="bg-[var(--primary-accent)] text-white rounded-full h-8 w-8 flex items-center justify-center mr-3 font-black text-lg">9</span>
+                Pre-Submission Checklist
+            </h2>
+            <div class="space-y-4" id="checklist-items">
+                <!-- Checklist items will be injected here -->
+            </div>
+            <div class="mt-6 flex justify-between items-center">
+                <p class="text-[var(--text-muted)]">Progress:</p>
+                <div class="w-full bg-[var(--border-color)]/50 rounded-full h-2.5 ml-4 mr-4">
+                    <div id="progress-bar" class="bg-[var(--secondary-accent)] h-2.5 rounded-full" style="width: 0%; transition: width 0.5s ease;"></div>
+                </div>
+                <span id="progress-text" class="font-bold text-white">0/5</span>
+            </div>
+        </section>
+        
+        <!-- 12. FAQ -->
+        <section class="section-card animate-on-scroll" id="faq">
+            <h2 class="text-2xl font-bold mb-6 text-white flex items-center">
+                <span class="bg-[var(--primary-accent)] text-white rounded-full h-8 w-8 flex items-center justify-center mr-3 font-black text-lg">12</span>
+                FAQ (Fast Answers)
+            </h2>
+            <div class="space-y-3" id="faq-container">
+                 <!-- FAQ items will be dynamically inserted here -->
+            </div>
+        </section>
+
+    </main>
+    
+    <!-- Footer -->
+    <footer class="text-center py-10 border-t border-[var(--border-color)]">
+        <p class="text-2xl font-bold tracking-wider text-white">Assist <span style="color: var(--secondary-accent);">&bull;</span> Acknowledge <span style="color: var(--secondary-accent);">&bull;</span> Authenticate</p>
+        <p class="text-gray-500 mt-2">Harness AI's power without risking your grade or integrity.</p>
+    </footer>
+
+
+    <!-- Modal for Disclosure -->
+    <div id="disclosure-modal-backdrop" class="modal-backdrop"></div>
+    <div id="disclosure-modal-content" class="modal-content w-11/12 max-w-2xl">
+        <div class="bg-[var(--card-bg)] rounded-lg shadow-xl border border-[var(--border-color)]">
+             <div class="p-6">
+                <div class="flex justify-between items-start mb-4">
+                     <h3 class="text-xl font-bold text-white">Statement of AI Assistance</h3>
+                     <button id="close-modal-button" class="text-[var(--text-muted)] hover:text-white transition-colors p-1 rounded-full hover:bg-gray-700 -mt-1 -mr-1">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                     </button>
+                </div>
+                <div class="bg-[var(--dark-bg)] p-4 rounded-md text-[var(--text-light)] space-y-2 border border-[var(--border-color)]">
+                    <p><strong class="text-white">Tool:</strong> ChatGPT-4o (OpenAI) — Prompted 10 May 2025.</p>
+                    <p><strong class="text-white">Role:</strong> Generated draft outline and two topic sentences.</p>
+                    <p><strong class="text-white">Edits:</strong> Student verified facts, provided citations, and rewrote ~70 % of wording.</p>
+                </div>
+                <p class="text-xs text-gray-500 mt-4">Place this in a footnote or endnote of your submission.</p>
+             </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Animate on Scroll ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+            // --- Golden Rules Data & Population ---
+            const rules = [
+                { title: 'Integrity', detail: 'Your submission must reflect your understanding. Treat AI help like help from a tutor: allowed only when the assignment permits and never to the point of doing the work for you.' },
+                { title: 'Transparency', detail: 'Always explain how AI helped, even if briefly. Many academic institutions require similar disclosure statements.' },
+                { title: 'Accountability', detail: 'You own any errors, hallucinated citations, or plagiarism an AI produces. As many academic policies state: “You are accountable for your work, regardless of the tools you use.”' },
+                { title: 'Privacy & Data Security', detail: 'Never paste sensitive, personal, or proprietary data into public models. This is often considered a breach of university data policy.' },
+            ];
+            
+            const rulesContainer = document.getElementById('rules-container');
+            rules.forEach(rule => {
+                const ruleEl = document.createElement('div');
+                ruleEl.className = 'bg-[#0f1742] rounded-lg border border-[var(--border-color)] cursor-pointer transition hover:bg-[#1a2357]';
+                ruleEl.innerHTML = `
+                    <div class="p-4 flex justify-between items-center rule-header">
+                        <h4 class="font-bold text-lg text-white">${rule.title}</h4>
+                        <span class="text-2xl text-[var(--text-muted)] transform transition-transform">+</span>
+                    </div>
+                    <div class="rule-detail px-4 text-[var(--text-muted)]">
+                         <div class="pb-4"><p>${rule.detail}</p></div>
+                    </div>
+                `;
+                rulesContainer.appendChild(ruleEl);
+            });
+
+            rulesContainer.addEventListener('click', (e) => {
+                const header = e.target.closest('.rule-header');
+                if (header) {
+                    const detail = header.nextElementSibling;
+                    const icon = header.querySelector('span');
+                    const isOpen = detail.classList.contains('open');
+                    rulesContainer.querySelectorAll('.rule-detail.open').forEach(openDetail => {
+                        if (openDetail !== detail) {
+                            openDetail.classList.remove('open');
+                            openDetail.previousElementSibling.querySelector('span').style.transform = 'rotate(0deg)';
+                        }
+                    });
+                    detail.classList.toggle('open');
+                    icon.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(45deg)';
+                }
+            });
+
+            // --- Disclosure Modal ---
+            const disclosureButton = document.getElementById('disclosure-button');
+            const closeModalButton = document.getElementById('close-modal-button');
+            const modalBackdrop = document.getElementById('disclosure-modal-backdrop');
+            const modalContent = document.getElementById('disclosure-modal-content');
+
+            const openModal = () => { modalBackdrop.classList.add('active'); modalContent.classList.add('active'); };
+            const closeModal = () => { modalBackdrop.classList.remove('active'); modalContent.classList.remove('active'); };
+
+            disclosureButton.addEventListener('click', openModal);
+            closeModalButton.addEventListener('click', closeModal);
+            modalBackdrop.addEventListener('click', closeModal);
+
+            // --- Citation Tabs ---
+            const tabsContainer = document.getElementById('citation-tabs');
+            tabsContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('tab')) {
+                    const targetId = e.target.dataset.target;
+                    tabsContainer.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+                    e.target.classList.add('active');
+                    document.querySelectorAll('.citation-panel').forEach(panel => panel.classList.add('hidden'));
+                    document.getElementById(targetId).classList.remove('hidden');
+                }
+            });
+
+            // --- Interactive Checklist ---
+            const checklistItems = [
+                'I verified every fact, quote, and reference from AI.',
+                'I rewrote or critically built upon AI text in my own voice.',
+                'My disclosure statement is included and complete.',
+                'I did not paste confidential or exam content into AI.',
+                'The syllabus explicitly permits my level of AI use.'
+            ];
+            const checklistContainer = document.getElementById('checklist-items');
+            
+            checklistItems.forEach((item, index) => {
+                const id = `check-${index}`;
+                const itemEl = document.createElement('label');
+                itemEl.htmlFor = id;
+                itemEl.className = 'checkbox-label flex items-center p-4 bg-[#0f1742] rounded-lg cursor-pointer hover:bg-[#1a2357] transition';
+                itemEl.innerHTML = `
+                    <input type="checkbox" id="${id}" class="hidden">
+                    <span class="checkbox-icon h-6 w-6 rounded-md border-2 border-[var(--text-muted)] flex-shrink-0 mr-4 flex items-center justify-center transition">
+                        <svg class="h-4 w-4 text-white hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                    <span class="text-[var(--text-muted)]">${item}</span>
+                `;
+                checklistContainer.appendChild(itemEl);
+            });
+
+            const checkboxes = checklistContainer.querySelectorAll('input[type="checkbox"]');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+
+            const updateProgress = () => {
+                const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+                const totalCount = checkboxes.length;
+                const percentage = totalCount > 0 ? (checkedCount / totalCount) * 100 : 0;
+                progressBar.style.width = `${percentage}%`;
+                progressText.textContent = `${checkedCount}/${totalCount}`;
+            };
+            checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+            updateProgress();
+
+            // --- FAQ ---
+            const faqs = [
+                { q: 'Can I use AI to translate my essay draft?', a: 'Yes—translation counts as substantive help, so include a disclosure and double-check accuracy.' },
+                { q: 'My instructor banned AI. What about Grammarly?', a: 'Advanced rewriting features use generative AI. These may be prohibited if the syllabus says “No external AI tools.” Ask your instructor first to be safe.' },
+                { q: 'Do I need to cite AI for a one-word thesaurus suggestion?', a: 'No. Minor word swaps are considered incidental use, so no disclosure is needed.' }
+            ];
+            const faqContainer = document.getElementById('faq-container');
+            faqs.forEach(faq => {
+                const faqEl = document.createElement('div');
+                faqEl.className = 'bg-[#0f1742] rounded-lg border border-[var(--border-color)]';
+                faqEl.innerHTML = `
+                    <button class="w-full text-left p-4 flex justify-between items-center faq-question">
+                        <span class="font-semibold text-white">${faq.q}</span>
+                        <svg class="w-6 h-6 text-[var(--text-muted)] transition-transform transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="faq-answer px-4 text-[var(--text-muted)]">
+                         <div class="pb-4"><p>${faq.a}</p></div>
+                    </div>
+                `;
+                faqContainer.appendChild(faqEl);
+            });
+
+            faqContainer.addEventListener('click', e => {
+                const question = e.target.closest('.faq-question');
+                if (question) {
+                    const answer = question.nextElementSibling;
+                    const icon = question.querySelector('svg');
+                    answer.classList.toggle('open');
+                    icon.style.transform = answer.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
